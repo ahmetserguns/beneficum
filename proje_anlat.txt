@@ -1,0 +1,140 @@
+
+Object Oriented Programming Projesi
+
+#TODO
+!! HER ATM no rastgele üretiliyor.
+!! Üretilen her atm'e default 50.000 para yuklu olsun.
+!! Müsteri ATM'de işlem yaptıkça artsın veya azalsın.
+!! Eger para cekme için gerekli miktar yok ise kullanıcıyı uyarsın.
+
+DATABASE:
+    SQLAlchemy, MySql
+    Program, kullanılacak olan tüm tabloları MySql üzerinde kendisi oluşturur.
+    Kullanıcının tablo tanımLamasına gerek yoktur.
+
+ATM üzerinde 3 farklı işlem menusu mevcuttur ve her menu altında birden fazla secenek vardır.
+
+Menüler sırasıyla:
+
+    1. Banka Personeli Giris
+    2. Müşteri İşlemleri
+    3. Alışveriş İşlemleri
+
+Menulerin detayları aşağıdaki gibidir:
+
+BANKACILIK İŞLEMLERİ:
+
+Bu menü banka yetkilileri için ortak calisan bir ekrandir.
+Bu ekran üzerinden:
+
+    1. Musteri hesabı Aç
+            Çeşitlilik olması adına bankalar musterilere rastgele atanır.
+            Banka isimlerine ekleme veya çıkarma yapabilirsiniz.
+    Hesap açılışında sistem tarafından türetilen bilgiler:
+            a. Vadesiz Mevduat Hesabı ve Yatırım Hesabı
+            b. #TODO Hesaplara ait IBAN numaraları (vsiz, yatirim, vadeli)
+            c. Debit Kart No ve şifresi
+            d. Kredi Kartı No, şifresi, güvenlik kodu, geçerlilik tarihi (Luhn alg. kullanır.)
+                    Kredi kartı açılış limiti 5000 TL'dir.
+                    ATM üzerinden kredi kartı geçici olarak kullanıma kapatılabilir.
+            d. Vadeli Hesap No , TL
+                Her ay başında faiz işletilir. #TODO
+    Not: Debit Kart ve Kredi Kartı bilgileri müsteriye SMS mesajıyla gonderilir. # TODO(Twilio)
+    Bu sebeple musterileri sisteme tanıtırken girilen telefon numaralari doğru olmalıdır!
+
+    2. Müsteri Hesabının Kapatılması
+        Kapatma islemi için müşterinin bankaya herhangi bir borcunun veya alacağının olmaması gerekmektedir.
+
+    3. Müşteri Bakiye Görüntüle
+        Bu ekran üzerinde müşteriye ait olan tüm hesaplar ve son bakiyeleri listelenir.
+
+    4. Müşteri Hesabını Bloke Et
+        Bu işlem yapıldığında müşteri ATM'lerden işlem yapamaz.
+
+    5. Müşteri Listele
+        Müşteriye ait tüm hesap bilgileri listelenir.
+
+
+ATM İŞLEMLERİ:
+ATM, belirli bir bankanın Ortak Nokta ATM'i olarak işlev görür.
+Default banka GARANTİ Bankasıdır. İstenirse değiştirilebilir.
+ATM'in hangi bankaaya ait olduğu ve ATM numarası ATM ekranından görülebilir.
+
+
+    ATM'de müşteriden "hesapno" ve "debit kart" şifresi sorulur.
+    Hesapno, debitkart'ın ATM'e girilmesini sembolize eder.
+
+    1. Para Çek
+        > Farklı banka müşterisi ise "komisyon" kesilir.
+    2. Para Yatır
+        > Para yatırma işlemini sadece default banka müsterisi yapabilir.
+    3. Bakiye Görüntüle
+        > Banka farkı gözetmeksizin her müşteri kullanabilir.
+        > Vadeli, Yatırım ve Kredi Kartı güncel bakiye bilgileri görüntülenir.
+
+    4. Bankalar Arasi Transfer:
+        İşlemleri uzatmamak için IBAN numarası girilmesi istenmemiştir.
+        > Eğer gönderici ve alici default banka müşterisi ise "komisyon" kesilmez.
+        > Eğer gönderici default banka ve alici değil ise göndericiden "komisyon" kesilmez. 
+        > Eğer gönderici default banka değil ve alici default banka ise göndericiden "komisyon" kesilmez.
+        > Eğer gönderici ve alici default banka müşterisi değil ise göndericiden "komisyon" kesilir. 
+
+    5. Kendi Hesapları Arasında Para Transferi
+        > Vadesiz Hesabından Yatırım Hesabına para aktarabilir.
+        > Aksi işlem kabul edilmemektedir.
+
+    6. Kredi Kartı Borç Öde
+        > Vadesiz hesaptan ödenir.
+        > Kredi kartına para yatırmakta sınır yoktur.
+
+    7. Yatırım hesabından Para Cek
+        > Para çekme işlemini sadece default banka müsterisi yapabilir.
+
+    8. Kredi Kartı Harcama Görüntüle (Mağaza+İnternet)
+            > Harcama Listesi (son 10 gün..)   #TODO
+
+    9.
+
+    10. Hesap Dokum Fisi
+            > Geriye dönük son 10 ATM islemini ekrana bastirir. #TODO
+
+
+ALIŞVERİŞ İŞLEMLERİ:
+
+Bu ekran üzerinde mağaza + internet alışverişi simüle edilmeye çalışılmıştır.
+
+Ekrana gelen firma seçenekleri arasından bir seçim yapılır.
+
+    Firmalar:
+        > Mağaza
+        > İnternet mağazası olarak iki farklı türde çalışırlar.
+    Ürün seçilir ve miktarı belirtilir.
+    Ödeme yap seçildiğinde ödeme ekranına yönlendirilir.
+
+Ödeme İşlemi:
+
+    Mağazalar:
+        Kredi kartı veya debit kart ile ödeme yapılabilir.
+
+    İnternet Mağazası:
+        Kredi Kartı ile ödeme yapılır.
+        Ödemenin sonlandırılabilmesi için 3D uygulaması örnek alınmıştır.
+        30 saniye içerisinde cep telefonuna gönderilen 3D Secure SMS mesajı ekrana girilmez ise alışveriş iptal edilir.
+
+Yapılan tüm alışverişler ATM menüsünden sorgulanabilir.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
