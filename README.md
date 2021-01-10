@@ -15,7 +15,7 @@
 Add more general information about project. What the purpose of the project is? Motivation?
 
 ## Screenshots
-![Example screenshot](https://github.com/ahmetserguns/beneficum/raw/master/img/bankmenu.png)
+![Example screenshot](./images/bankmenu.png)
 
 ## Technologies
 * Tech 1 - version 1.0
